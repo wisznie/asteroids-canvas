@@ -9,6 +9,7 @@ context.canvas.height = height;
 context.canvas.width = width;
 
 missles = []
+playerOrientation = "North"
 const keys = {}; // Object to store the state of pressed keys
 player = {
 	height: 32,
@@ -44,24 +45,62 @@ function draw() {
 		context.rect(missles[i].x, missles[i].y, 2, 2);
 		context.fill();
 	}
+	// update missles
+	for (let i = 0; i < missles.length; i++) {
+		newMissles = []
+		missle = missles.pop()
+		missle
+	}
 }
 
 function update() {
-	if (keys.KeyW || keys.ArrowUp) {
-		player.y -= player.speed;
-	} if (keys.KeyS || keys.ArrowDown) {
-		player.y += player.speed;
-	} if (keys.KeyA || keys.ArrowLeft) {
-		player.x -= player.speed;
-	} if (keys.KeyD || keys.ArrowRight) {
-		player.x += player.speed;
-	} if (keys.Space) {
+	north = (keys.KeyW || keys.ArrowUp);
+	south = (keys.KeyS || keys.ArrowDown);
+	east = (keys.KeyA || keys.ArrowLeft);
+	west = (keys.KeyD || keys.ArrowRight);
+	newPlayerOrientation = "";
+	newPlayer = {
+		height: 32,
+		width: 32,
+		speed: 3,
+		x: player.x,
+		y: player.y
+	};
+	if (north && !south) {
+		newPlayerOrientation = north;
+		newPlayer.y -= player.speed;
+	} else if (south && !north) {
+		newPlayerOrientation = south;
+		newPlayer.y += player.speed;
+	}
+	if (east && !west) {
+		newPlayerOrientation += east;
+		newPlayer.x -= player.speed;
+	} else if (west && !east) {
+		newPlayerOrientation += west;
+		newPlayer.x += player.speed;
+	}
+	if (newPlayerOrientation.length > 0) {
+		playerOrientation = newPlayerOrientation;
+	}
+	player = newPlayer;
+
+	if (keys.Space) {
 		fireMissle();
 	}
 }
 
 function fireMissle() {
-	missles.push({ x: player.x + 3, y: player.y + 3 })
+	// North
+	// NorthWest
+	// NorthEast
+	// South
+	// SouthWest
+	// SouthEast
+	// West
+	// East
+	direction = "n"
+	missles.push({ x: player.x + 3, y: player.y + 3, velocity: 7, direction: direction })
 }
 
 gameLoop = function() {
