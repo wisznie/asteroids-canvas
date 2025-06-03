@@ -11,6 +11,7 @@ context.canvas.width = width;
 var missles = [];
 var playerOrientation = "North";
 const keys = {}; // Object to store the state of pressed keys
+var spaceRegistered = false;
 player = {
 	height: 32,
 	width: 32,
@@ -20,13 +21,20 @@ player = {
 	y: height / 2,
 };
 
+function drawSpaceship() {
+	context.fillStyle = "#ffffff";// hex for red
+	context.beginPath();
+	context.moveTo(player.x, player.y);
+	context.lineTo(player.x + player.width, player.y);
+	context.lineTo(player.x + player.width / 2, player.y + player.height);
+	context.lineTo(player.x, player.y);
+	context.fill();
+}
+
 function draw() {
 	context.fillStyle = "#202020";
 	context.fillRect(0, 0, width, height);// x, y, width, height
-	context.fillStyle = "#ff0000";// hex for red
-	context.beginPath();
-	context.rect(player.x, player.y, player.width, player.height);
-	context.fill();
+	drawSpaceship();
 
 	// if player goes past boundary
 	if (player.x > width) {
@@ -115,13 +123,16 @@ function update() {
 	}
 	missles = newMissles;
 
-	if (keys.Space) {
+	if (!spaceRegistered && keys.Space) {
+		spaceRegistered = true;
 		fireMissle();
+	} else if (spaceRegistered && !keys.Space) {
+		spaceRegistered = false;
 	}
 }
 
 function fireMissle() {
-	missles.push({ x: player.x + 3, y: player.y + 3, velocity: 7, direction: playerOrientation })
+	missles.push({ x: player.x + 3, y: player.y + 3, velocity: 5, direction: playerOrientation })
 }
 
 gameLoop = function() {
