@@ -19,16 +19,13 @@ player = {
 	// Center of the canvas
 	x: width / 2,
 	y: height / 2,
+	rotation: 0,
 };
 
 function drawSpaceship() {
-	context.fillStyle = "#ffffff";// hex for red
-	context.beginPath();
-	context.moveTo(player.x, player.y);
-	context.lineTo(player.x + player.width, player.y);
-	context.lineTo(player.x + player.width / 2, player.y + player.height);
-	context.lineTo(player.x, player.y);
-	context.fill();
+	var img = new Image;
+	img.src = "./assets/spaceship.svg";
+	context.drawImage(img, player.x, player.y, player.height, player.width);
 }
 
 function draw() {
@@ -50,6 +47,7 @@ function draw() {
 	// draw missles
 	for (let i = 0; i < missles.length; i++) {
 		context.beginPath();
+		context.fillStyle = "#ffffff";// hex for red
 		context.rect(missles[i].x, missles[i].y, 2, 2);
 		context.fill();
 	}
