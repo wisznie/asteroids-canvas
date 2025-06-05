@@ -73,19 +73,19 @@ function update() {
 	};
 	if (north && !south) {
 		newPlayerOrientation = "North";
-		newPlayer.y -= player.speed;
+		newPlayer.y -= player.speed * Math.sin(player.rotation);
+		newPlayer.x -= player.speed * Math.cos(player.rotation);
 	} else if (south && !north) {
 		newPlayerOrientation = "South";
-		newPlayer.y += player.speed;
+		newPlayer.y += player.speed * Math.sin(player.rotation);
+		newPlayer.x += player.speed * Math.cos(player.rotation);
 	}
 	if (east && !west) {
 		newPlayerOrientation += "East";
-		newPlayer.rotation -= Math.PI / 40;
-		newPlayer.x -= player.speed;
+		newPlayer.rotation -= Math.PI / 150;
 	} else if (west && !east) {
 		newPlayerOrientation += "West";
-		newPlayer.rotation += Math.PI / 40;
-		newPlayer.x += player.speed;
+		newPlayer.rotation += Math.PI / 150;
 	}
 	if (newPlayerOrientation.length > 0) {
 		playerOrientation = newPlayerOrientation;
