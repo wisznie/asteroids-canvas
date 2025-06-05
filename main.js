@@ -25,7 +25,11 @@ player = {
 function drawSpaceship() {
 	var img = new Image;
 	img.src = "./assets/spaceship.svg";
-	context.drawImage(img, player.x, player.y, player.height, player.width);
+	context.save();
+	context.translate(player.x, player.y);
+	context.rotate(player.rotation);
+	context.drawImage(img, 0, 0, player.height, player.width);
+	context.restore();
 }
 
 function draw() {
@@ -64,7 +68,8 @@ function update() {
 		width: 32,
 		speed: 3,
 		x: player.x,
-		y: player.y
+		y: player.y,
+		rotation: player.rotation
 	};
 	if (north && !south) {
 		newPlayerOrientation = "North";
@@ -75,15 +80,18 @@ function update() {
 	}
 	if (east && !west) {
 		newPlayerOrientation += "East";
+		newPlayer.rotation -= Math.PI / 40;
 		newPlayer.x -= player.speed;
 	} else if (west && !east) {
 		newPlayerOrientation += "West";
+		newPlayer.rotation += Math.PI / 40;
 		newPlayer.x += player.speed;
 	}
 	if (newPlayerOrientation.length > 0) {
 		playerOrientation = newPlayerOrientation;
 	}
 	player = newPlayer;
+	console.log(player);
 
 	var newMissles = [];
 	let numMissles = missles.length;
