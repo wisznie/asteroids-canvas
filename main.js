@@ -19,7 +19,7 @@ player = {
 	// Center of the canvas
 	x: width / 2,
 	y: height / 2,
-	rotation: 0,
+	rotation: Math.PI / 2,
 };
 
 function drawSpaceship() {
@@ -73,12 +73,12 @@ function update() {
 	};
 	if (north && !south) {
 		newPlayerOrientation = "North";
-		newPlayer.y -= player.speed * Math.sin(player.rotation);
-		newPlayer.x -= player.speed * Math.cos(player.rotation);
-	} else if (south && !north) {
-		newPlayerOrientation = "South";
 		newPlayer.y += player.speed * Math.sin(player.rotation);
 		newPlayer.x += player.speed * Math.cos(player.rotation);
+	} else if (south && !north) {
+		newPlayerOrientation = "South";
+		newPlayer.y -= player.speed * Math.sin(player.rotation);
+		newPlayer.x -= player.speed * Math.cos(player.rotation);
 	}
 	if (east && !west) {
 		newPlayerOrientation += "East";
