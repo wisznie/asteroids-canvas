@@ -9,7 +9,6 @@ context.canvas.height = height;
 context.canvas.width = width;
 
 var missles = [];
-var playerOrientation = "North";
 const keys = {}; // Object to store the state of pressed keys
 var spaceRegistered = false;
 player = {
@@ -62,7 +61,6 @@ function update() {
 	var south = (keys.KeyS || keys.ArrowDown);
 	var east = (keys.KeyA || keys.ArrowLeft);
 	var west = (keys.KeyD || keys.ArrowRight);
-	var newPlayerOrientation = "";
 	var newPlayer = {
 		height: 32,
 		width: 32,
@@ -77,7 +75,6 @@ function update() {
 		newPlayer.speed -= .001;
 	}
 	if (north && !south) {
-		newPlayerOrientation = "North";
 		if (player.speed < 2.5) {
 			newPlayer.speed += 0.1;
 		}
@@ -88,14 +85,9 @@ function update() {
 		}
 	}
 	if (east && !west) {
-		newPlayerOrientation += "East";
 		newPlayer.rotation -= Math.PI / 150;
 	} else if (west && !east) {
-		newPlayerOrientation += "West";
 		newPlayer.rotation += Math.PI / 150;
-	}
-	if (newPlayerOrientation.length > 0) {
-		playerOrientation = newPlayerOrientation;
 	}
 	player = newPlayer;
 
@@ -103,34 +95,8 @@ function update() {
 	let numMissles = missles.length;
 	for (i = 0; i < numMissles; i++) {
 		var newMissle = missles.pop();
-		if (newMissle.direction == "North") {
-			newMissle.y -= newMissle.velocity;
-		}
-		if (newMissle.direction == "NorthEast") {
-			newMissle.y -= newMissle.velocity;
-			newMissle.x -= newMissle.velocity;
-		}
-		if (newMissle.direction == "NorthWest") {
-			newMissle.y -= newMissle.velocity;
-			newMissle.x += newMissle.velocity;
-		}
-		if (newMissle.direction == "South") {
-			newMissle.y += newMissle.velocity;
-		}
-		if (newMissle.direction == "SouthEast") {
-			newMissle.y += newMissle.velocity;
-			newMissle.x -= newMissle.velocity;
-		}
-		if (newMissle.direction == "SouthWest") {
-			newMissle.y += newMissle.velocity;
-			newMissle.x += newMissle.velocity;
-		}
-		if (newMissle.direction == "East") {
-			newMissle.x -= newMissle.velocity;
-		}
-		if (newMissle.direction == "West") {
-			newMissle.x += newMissle.velocity;
-		}
+		newMissle.y += newMissle.velocity * Math.sin(newMissle.rotation);
+		newMissle.x += newMissle.velocity * Math.cos(newMissle.rotation);
 		newMissles.push(newMissle);
 	}
 	missles = newMissles;
@@ -144,7 +110,7 @@ function update() {
 }
 
 function fireMissle() {
-	missles.push({ x: player.x + 3, y: player.y + 3, velocity: 5, direction: playerOrientation })
+	missles.push({ x: player.x + 3, y: player.y + 3, velocity: 5, rotation: player.rotation })
 }
 
 gameLoop = function() {
