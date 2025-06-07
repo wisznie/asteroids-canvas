@@ -27,7 +27,11 @@ function drawSpaceship() {
 	context.save();
 	context.translate(player.x, player.y);
 	context.rotate(player.rotation);
-	context.drawImage(img, 0, 0, player.height, player.width);
+	// Draw the image centered at the origin
+	// Subtract half the width and height to center the image
+	// Adjust the size as needed
+	context.drawImage(img, -player.width / 2, -player.height / 2, player.width, player.height);
+	//context.drawImage(img, 0, 0, player.height, player.width);
 	context.restore();
 }
 
@@ -110,7 +114,9 @@ function update() {
 }
 
 function fireMissle() {
-	missles.push({ x: player.x + 3, y: player.y + 3, velocity: 5, rotation: player.rotation })
+	tipX = player.x + (player.width / 2) * Math.cos(player.rotation);
+	tipY = player.y + (player.height / 2) * Math.sin(player.rotation);
+	missles.push({ x: tipX, y: tipY, velocity: 5, rotation: player.rotation })
 }
 
 gameLoop = function() {
