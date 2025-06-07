@@ -15,7 +15,7 @@ var spaceRegistered = false;
 player = {
 	height: 32,
 	width: 32,
-	speed: 3,
+	speed: 0.7,
 	// Center of the canvas
 	x: width / 2,
 	y: height / 2,
@@ -66,19 +66,26 @@ function update() {
 	var newPlayer = {
 		height: 32,
 		width: 32,
-		speed: 3,
+		speed: player.speed,
 		x: player.x,
 		y: player.y,
 		rotation: player.rotation
 	};
+	newPlayer.y += player.speed * Math.sin(player.rotation);
+	newPlayer.x += player.speed * Math.cos(player.rotation);
+	if (player.speed > 0.0) {
+		newPlayer.speed -= .001;
+	}
 	if (north && !south) {
 		newPlayerOrientation = "North";
-		newPlayer.y += player.speed * Math.sin(player.rotation);
-		newPlayer.x += player.speed * Math.cos(player.rotation);
-	} else if (south && !north) {
-		newPlayerOrientation = "South";
-		newPlayer.y -= player.speed * Math.sin(player.rotation);
-		newPlayer.x -= player.speed * Math.cos(player.rotation);
+		if (player.speed < 2.5) {
+			newPlayer.speed += 0.1;
+		}
+	}
+	else if (south && !north) {
+		if (player.speed > 0.0) {
+			newPlayer.speed -= 0.1;
+		}
 	}
 	if (east && !west) {
 		newPlayerOrientation += "East";
@@ -91,7 +98,6 @@ function update() {
 		playerOrientation = newPlayerOrientation;
 	}
 	player = newPlayer;
-	console.log(player);
 
 	var newMissles = [];
 	let numMissles = missles.length;
