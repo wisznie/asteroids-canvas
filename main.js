@@ -9,6 +9,7 @@ context.canvas.height = height;
 context.canvas.width = width;
 
 var missles = [];
+var asteroids = generateAsteroids(false, 15).concat(generateAsteroids(true, 30));
 const keys = {}; // Object to store the state of pressed keys
 var spaceRegistered = false;
 player = {
@@ -21,16 +22,26 @@ player = {
 	rotation: Math.PI / 2,
 };
 
+function drawAsteroids() {
+	for (let i = 0; i < asteroids.length; i++) {
+		var asteroid = asteroids[i];
+		drawSvg("./assets/asteroidA.svg", asteroid.x, asteroid.y, asteroid.width, asteroid.height, asteroid.rotation);
+	}
+}
 function drawSpaceship() {
+	drawSvg("./assets/spaceship.svg", player.x, player.y, player.width, player.height, player.rotation);
+}
+
+function drawSvg(src, x, y, width, height, rotation) {
 	var img = new Image;
-	img.src = "./assets/spaceship.svg";
+	img.src = src;
 	context.save();
-	context.translate(player.x, player.y);
-	context.rotate(player.rotation);
+	context.translate(x, y);
+	context.rotate(rotation);
 	// Draw the image centered at the origin
 	// Subtract half the width and height to center the image
 	// Adjust the size as needed
-	context.drawImage(img, -player.width / 2, -player.height / 2, player.width, player.height);
+	context.drawImage(img, -width / 2, -height / 2, width, height);
 	//context.drawImage(img, 0, 0, player.height, player.width);
 	context.restore();
 }
@@ -39,6 +50,7 @@ function draw() {
 	context.fillStyle = "#202020";
 	context.fillRect(0, 0, width, height);// x, y, width, height
 	drawSpaceship();
+	drawAsteroids();
 
 	// if player goes past boundary
 	if (player.x > width) {
@@ -111,6 +123,42 @@ function update() {
 	} else if (spaceRegistered && !keys.Space) {
 		spaceRegistered = false;
 	}
+
+	fillAsteroids();
+	for (i = 0; asteroids.length > i; i++) {
+		var asteroid = asteroids[i];
+		// Update asteroid position if needed (e.g., for movement)
+		asteroid.rotation += 0.01; // Example rotation update
+		asteroid.x += 0.1; // Example movement
+		asteroid.y += 0.1; // Example movement
+		// Check if the asteroid is out of bounds and reset its positio
+	}
+}
+
+function fillAsteroids() {
+	for (let i = asteroids.length - 1; i >= 0; i--) {
+		if (asteroids[i].x < -100 || asteroids[i].x > width + 100 || asteroids[i].y < -100 || asteroids[i].y > height + 100) {
+			asteroids.splice(i, 1);
+		}
+	}
+	if (asteroids.length < 20) {
+		// Generate new asteroids if there are less than 15
+		asteroids = asteroids.concat(generateAsteroids(true, 10));
+	}
+}
+
+function generateAsteroids(negative, len) {
+	var asteroidsGen = [];
+	for (i = 0; i < len; i++) {
+		var x = Math.random() * width;
+		var y = Math.random() * height;
+		if (negative) {
+			y = -y;
+		}
+		var rotation = Math.random() * Math.PI * 2; // Random rotation
+		asteroidsGen.push({ x: x, y: y, width: 64, height: 64, rotation: rotation });
+	}
+	return asteroidsGen;
 }
 
 function fireMissle() {
