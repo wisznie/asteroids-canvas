@@ -148,6 +148,22 @@ function update() {
 			}
 		}
 	}
+	// Check for collisions between player and asteroids
+	for (let i = asteroids.length - 1; i >= 0; i--) {
+		let asteroid = asteroids[i];
+		if (player.x > asteroid.x && player.x < asteroid.x + asteroid.width &&
+			player.y > asteroid.y && player.y < asteroid.y + asteroid.height) {
+			// Collision detected, handle it (e.g., reset player position, reduce health, etc.)
+			console.log("Collision detected between player and asteroid!");
+			// Reset player position as an example
+			player.x = width / 2;
+			player.y = height / 2;
+			// Remove the asteroid
+			asteroids.splice(i, 1);
+			// Break out of the loop after handling the collision
+			break;
+		}
+	}
 }
 
 function fillAsteroids() {
