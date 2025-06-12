@@ -133,6 +133,21 @@ function update() {
 		asteroid.y += 0.1; // Example movement
 		// Check if the asteroid is out of bounds and reset its positio
 	}
+	// Check for collisions between missles and asteroids
+	for (let i = missles.length - 1; i >= 0; i--) {
+		let missle = missles[i];
+		for (let j = asteroids.length - 1; j >= 0; j--) {
+			let asteroid = asteroids[j];
+			// Check if the missle is within the bounds of the asteroid
+			if (missle.x > asteroid.x && missle.x < asteroid.x + asteroid.width &&
+				missle.y > asteroid.y && missle.y < asteroid.y + asteroid.height) {
+				// Collision detected, remove both the missle and the asteroid
+				missles.splice(i, 1);
+				asteroids.splice(j, 1);
+				break; // Break out of the inner loop to avoid checking other asteroids
+			}
+		}
+	}
 }
 
 function fillAsteroids() {
@@ -153,6 +168,7 @@ function generateAsteroids(negative, len) {
 		var x = Math.random() * width;
 		var y = Math.random() * height;
 		if (negative) {
+
 			y = -y;
 		}
 		var rotation = Math.random() * Math.PI * 2; // Random rotation
